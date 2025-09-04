@@ -17,28 +17,42 @@ import XCTest
 import SIL
 
 public final class ModuleTests: XCTestCase {
+    
     public func testAvgPool1D() {
-        testRoundtrip("Tests/SILTests/Resources/AvgPool1D.sil")
+        testRoundtrip(forResource: "AvgPool1D", withExtension: "sil")
     }
 
-    private func testRoundtrip(_ silPath: String) {
+    private func testRoundtrip(forResource resource: String, withExtension `extension`: String) {
+
         do {
-            guard let expectedData = FileManager.default.contents(atPath: silPath) else {
-                return XCTFail("\(silPath) not found")
+
+            guard let url = Bundle.module.url(forResource: resource, withExtension: `extension`) else {
+                XCTFail("Missing resource file \(resource)")
+                return
             }
+
+            let path = url.path(percentEncoded: false)
+
+            guard let expectedData = FileManager.default.contents(atPath: path) else {
+                return XCTFail("\(path) not found")
+            }
+
             guard let expected = String(data: expectedData, encoding: .utf8) else {
-                return XCTFail("\(silPath) not in UTF-8")
+                return XCTFail("\(path) not in UTF-8")
             }
-            let module = try Module.parse(fromSILPath: silPath)
+
+            let module = try Module.parse(fromSILPath: path)
             let actual = module.description + "\n"
+
             if (expected != actual) {
+
                 if let actualFile = FileManager.default.makeTemporaryFile() {
                     let actualPath = actualFile.path
                     FileManager.default.createFile(atPath: actualPath, contents: Data(actual.utf8))
-                    if shelloutOrFail("colordiff", "-u", silPath, actualPath) {
-                        XCTFail("Roundtrip failed: expected \(silPath), actual: \(actualPath)")
+                    if shelloutOrFail("colordiff", "-u", path, actualPath) {
+                        XCTFail("Roundtrip failed: expected \(path), actual: \(actualPath)")
                     } else {
-                        XCTFail("Roundtrip failed: expected \(silPath), actual: \n\(actual)")
+                        XCTFail("Roundtrip failed: expected \(path), actual: \n\(actual)")
                     }
                 } else {
                     XCTFail("Roundtrip failed")
@@ -51,6 +65,7 @@ public final class ModuleTests: XCTestCase {
 }
 
 extension ModuleTests {
+    
     public static let allTests = [
         ("testAvgPool1D", testAvgPool1D),
     ]

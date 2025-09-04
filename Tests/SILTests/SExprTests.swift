@@ -17,28 +17,41 @@ import XCTest
 import SIL
 
 public final class SExprTests: XCTestCase {
+
     public func testExample() {
-        testRoundtrip("Tests/SILTests/Resources/Example.sexpr")
+
+        testRoundtrip(forResource: "Example", withExtension: "sexpr")
     }
 
-    private func testRoundtrip(_ sourcePath: String) {
+    private func testRoundtrip(forResource resource: String, withExtension `extension`: String) {
+
         do {
-            guard let expectedData = FileManager.default.contents(atPath: sourcePath) else {
-                return XCTFail("\(sourcePath) not found")
+            
+            guard let url = Bundle.module.url(forResource: resource, withExtension: `extension`) else {
+                XCTFail("Missing resource file \(resource)")
+                return
+            }
+
+            let path = url.path(percentEncoded: false)
+
+            guard let expectedData = FileManager.default.contents(atPath: path) else {
+                return XCTFail("\(path) not found")
             }
             guard let expected = String(data: expectedData, encoding: .utf8) else {
-                return XCTFail("\(sourcePath) not in UTF-8")
+                return XCTFail("\(path) not in UTF-8")
             }
-            let sexpr = try SExpr.parse(fromPath: sourcePath)
+            let sexpr = try SExpr.parse(fromPath: path)
             let actual = sexpr.description + "\n"
+
             if normalize(expected) != actual {
+
                 if let actualFile = FileManager.default.makeTemporaryFile() {
                     let actualPath = actualFile.path
                     FileManager.default.createFile(atPath: actualPath, contents: Data(actual.utf8))
-                    if shelloutOrFail("colordiff", "-u", sourcePath, actualPath) {
-                        XCTFail("Roundtrip failed: expected \(sourcePath), actual: \(actualPath)")
+                    if shelloutOrFail("colordiff", "-u", path, actualPath) {
+                        XCTFail("Roundtrip failed: expected \(path), actual: \(actualPath)")
                     } else {
-                        XCTFail("Roundtrip failed: expected \(sourcePath), actual: \n\(actual)")
+                        XCTFail("Roundtrip failed: expected \(path), actual: \n\(actual)")
                     }
                 } else {
                     XCTFail("Roundtrip failed")
