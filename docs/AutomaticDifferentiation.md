@@ -81,7 +81,7 @@ differentiation" and "model as code", as shown in the following diagram (cite:
 boundaries of Python, other research projects like
 [DLVM](https://dlvm-team.github.io) experimented with SCT AD directly on a
 compiler IR that's analogous to the
-[Swift Intermediate Language](https://github.com/apple/swift/blob/main/docs/SIL.rst)
+[Swift Intermediate Language](https://github.com/apple/swift/blob/main/docs/SIL/SIL.md)
 (SIL).
 
 <p align="center">

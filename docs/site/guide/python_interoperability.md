@@ -228,7 +228,7 @@ We think that this is pretty compelling, and does close the remaining expressivi
 
 ### Exception handling vs error handling
 
-Python’s approach to exception handling is similar to C++ and many other languages, where any expression can throw an exception at any time, and callers can choose to handle them (or not) independently.  In contrast, Swift’s [error handling approach](https://github.com/apple/swift/blob/main/docs/ErrorHandling.rst) makes "throwability" an explicit part of a method’s API contract and [forces callers to handle (or at least acknowledge)](https://github.com/apple/swift/blob/main/docs/ErrorHandlingRationale.rst) that an error can be thrown.
+Python’s approach to exception handling is similar to C++ and many other languages, where any expression can throw an exception at any time, and callers can choose to handle them (or not) independently.  In contrast, Swift’s [error handling approach](https://github.com/apple/swift/blob/main/docs/ErrorHandling.md) makes "throwability" an explicit part of a method’s API contract and [forces callers to handle (or at least acknowledge)](https://github.com/apple/swift/blob/main/docs/ErrorHandlingRationale.md) that an error can be thrown.
 
 This is an inherent gap between the two languages, and we don’t want to paper over this difference with a language extension.  Our current solution to this builds on the observation that even though any function call *could* throw, most calls do not.  Furthermore, given that Swift makes error handling explicit in the language, it is reasonable for a Python-in-Swift programmer to also think about where they expect errors to be throwable and catchable.  We do this with an explicit `.throwing` projection on `PythonObject`.  Here’s an example:
 
