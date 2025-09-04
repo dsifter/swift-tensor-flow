@@ -297,7 +297,7 @@ class SILParser: Parser {
             try take("to")
             var ownership: StoreOwnership?
             if skip("[init]") {
-                ownership = .init
+                ownership = .`init`
             } else if skip("[trivial]") {
                 ownership = .trivial
             }
