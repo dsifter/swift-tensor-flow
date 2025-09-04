@@ -16,7 +16,7 @@ import Foundation
 
 // You can think of this struct as either [Bool] representing a bit sequence
 // or as an arbitrary precision integer (with checked casts to fixed-width values).
-struct Bits: Equatable, Hashable, ExpressibleByIntegerLiteral, CustomStringConvertible {
+struct Bits: Sendable, Equatable, Hashable, ExpressibleByIntegerLiteral, CustomStringConvertible {
     // Sorted in the order of significance, i.e. bits[0] is the LSB.
     private var bits: [Bool]
     var description: String { String(bits.reversed().map { $0 ? "1" : "0" }) }

@@ -26,7 +26,7 @@ indirect enum OperandKind {
     case blob
 }
 
-indirect enum BitcodeOperand {
+indirect enum BitcodeOperand : Sendable {
     case bits(Bits)
     case blob([UInt8])
     case array([BitcodeOperand])

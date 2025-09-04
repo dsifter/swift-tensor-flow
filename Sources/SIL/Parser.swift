@@ -199,7 +199,7 @@ class Parser {
         return Parser.Error(path, line, column, message)
     }
 
-    class Error: Swift.Error, CustomStringConvertible {
+    final class Error: Swift.Error, CustomStringConvertible {
         let path: String
         let line: Int?
         let column: Int?

@@ -16,6 +16,7 @@ import XCTest
 @testable import SIL
 
 public final class BitcodeTests: XCTestCase {
+
     private func testLoadingSIB() {
         do {
             let topBlock = try loadSIBBitcode(fromPath: "Tests/SILTests/Resources/AddFloat.sib")
@@ -52,8 +53,9 @@ public final class BitcodeTests: XCTestCase {
 }
 
 extension BitcodeTests {
-    public static let allTests: [(String, (BitcodeTests) -> () -> Void)] = [
+    public static let allTests = [
         // TODO(TF-774): Disabling the test since it's not on the critical path at the moment.
-        // ("testLoadingSIB", testLoadingSIB),
+        // FIX THIS - DJS: reenabled to avoid compilation problems in Swift tools version 6.1
+        ("testLoadingSIB", testLoadingSIB),
     ]
 }
